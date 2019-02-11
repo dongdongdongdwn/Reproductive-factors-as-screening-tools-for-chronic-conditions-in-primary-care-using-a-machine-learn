@@ -1,4 +1,4 @@
-# Reproductive-factors-as-screening-tools-for-chronic-conditions-in-primary-care-using-a-machine-learn
+# Reproductive-factors-as-screening-tools-for-chronic-conditions-in-primary-care-using-a-machine-learning based approach
 Autoencoder
 When activation function is sigmoid, learning rate is 0.001,optimizer is Adamoptimizer, the training process is faster and more stable.
 n_layer1/2/3 could be changed as you want. However, sparse does not work well.
