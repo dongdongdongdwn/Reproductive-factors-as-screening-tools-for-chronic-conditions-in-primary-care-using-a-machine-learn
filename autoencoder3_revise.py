@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import csv
+import csv                      
 from pandas import DataFrame
 from pandas import Series,DataFrame
 from sklearn import preprocessing
@@ -17,17 +17,13 @@ dwnn = preprocessing.scale(dwn)
 # tf.Session() as sess:
     # (sess.run(XXX))
     
-learning_rate = 0.001
-training_epochs = 1  
-batch_size = 600  
-
 n_input = 10
-
-X = tf.placeholder(tf.float32, [None, n_input])  
-
-n_hidden_1 = 500 # 第一编码层,neural num  
-n_hidden_2 = 100 # 第二编码层,neural num 
-n_hidden_3 = 1 # 第三编码层,neural num 
+n_hidden_3 = 1    
+for learning_rate in (0.001,0.005,0.01,0.05,0.1,0.5):
+    for batch_size_n in (100,300,600):
+        for n_hidden_1 in range(9,8,7,6,5,4,3):
+            for n_hidden_2 in range(8,7,6,5,4,3,2):
+                
 
 weights = {  
     'encoder_h1': tf.Variable(tf.random_normal([n_input, n_hidden_1])),  
@@ -77,11 +73,12 @@ y_true = X
 #cost function and optimizer
 cost = tf.reduce_mean(tf.pow(y_true - y_pred, 2))  
 optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
+#could try different Optimizer here, i.e.
+#optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
 
-
-#define next_batch
+#define batch
 def batch_iter(sourceData, batch_size, num_epochs, shuffle=True):
-    data = np.array(sourceData)  # 将sourceData转换为array存储
+    data = np.array(sourceData)  # save sourceData as array
     data_size = len(sourceData)
     num_batches_per_epoch = int(len(sourceData) / batch_size) + 1
     for epoch in range(num_epochs):
@@ -105,16 +102,16 @@ def batch_iter(sourceData, batch_size, num_epochs, shuffle=True):
 with tf.Session() as sess:
     init=tf.global_variables_initializer()
     sess.run(init)
-    for epoch in range(10):
+    for epoch in range(30):
         for batch_num in range(6):
         
-            batch_xs=batch_iter(dwnn, 600, 10, shuffle=True)
+            batch_xs=batch_iter(dwnn, batch_size_n, 30, shuffle=True)
             batch_xss=next(batch_xs)
             _, c = sess.run([optimizer, cost], feed_dict={X: batch_xss})
             
     
 
-
+    #training_epochs = 1 
     #total_batch=int(3054/batch_size)
     #for epoch in range(training_epochs):
         #for i in range(total_batch):
@@ -137,3 +134,7 @@ with tf.Session() as sess:
     
 
 
+
+    
+    
+    
